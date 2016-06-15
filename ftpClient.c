@@ -24,25 +24,19 @@ char    localhost[] = "192.168.70.1";	/* local host name			*/
 /*-----------------------------------------------
 * Program: ftpclient
 *
-* Purpose:
+* functions : as the ftp client on windows
 *
-* Syntax:
-*
-*
-*
-*
-* Notes:
-*
-*
+* Writer : zixin
+* 
 *-------------------------------------------------------
 */
-/*º¯ÊıÉùÃ÷*/
-int send_recv(SOCKET sd, char *input, char *res, int *len); //Ïòsocket·¢ËÍÃüÁî²¢½ÓÊÕÏìÓ¦
-int nlst_list(SOCKET sd);                                   //ÁĞ³öÎÄ¼şÁĞ±í
-int pasv_connect(SOCKET sd);                          //½øÈëpasvÁ¬½Ó
-int  make_socket(char *host,int port);          //´´½¨socketÁ¬½Ó
-int down_file(SOCKET sd, char *sourcefile, char *localfile, int * size);    //ÏÂÔØÎÄ¼ş
-int up_file(SOCKET sd, char *sourcefile, char *localfile, int * size);          //ÉÏ´«ÎÄ¼ş
+/*å‡½æ•°å£°æ˜*/
+int send_recv(SOCKET sd, char *input, char *res, int *len); //å‘socketå‘é€å‘½ä»¤å¹¶æ¥æ”¶å“åº”
+int nlst_list(SOCKET sd);                                   //åˆ—å‡ºæ–‡ä»¶åˆ—è¡¨
+int pasv_connect(SOCKET sd);                          //è¿›å…¥pasvè¿æ¥
+int  make_socket(char *host,int port);          //åˆ›å»ºsocketè¿æ¥
+int down_file(SOCKET sd, char *sourcefile, char *localfile, int * size);    //ä¸‹è½½æ–‡ä»¶
+int up_file(SOCKET sd, char *sourcefile, char *localfile, int * size);          //ä¸Šä¼ æ–‡ä»¶
 
 int  main(int   argc, char  *argv[])
 {
@@ -56,17 +50,17 @@ int  main(int   argc, char  *argv[])
   char *space = " ";
   SOCKET sd;
 
-    /*socketÁ¬½Óµ½·şÎñÆ÷*/
+    /*socketè¿æ¥åˆ°æœåŠ¡å™¨*/
     port = FTPPORT;
     while(1){
          fprintf(stderr,"MyFTP>");
          gets(input);
          if  (strlen(input)==0)  continue;
 
-         command = strtok(input,space); //È¡ÓÃ»§ÊäÈëÖ¸ÁîµÄµÚÒ»¸ö×Ö¶Î£¨ÒÔ¿Õ¸ñ¸ô¿ª£©
+         command = strtok(input,space); //å–ç”¨æˆ·è¾“å…¥æŒ‡ä»¤çš„ç¬¬ä¸€ä¸ªå­—æ®µï¼ˆä»¥ç©ºæ ¼éš”å¼€ï¼‰
 
          if(strcmp(command,"OPEN")==0){
-            command = strtok(NULL,space);   //È¡ÓÃ»§ÊäÈëÖ¸ÁîµÄµÚ¶ş¸ö×Ö¶Î£¬¼´ipµØÖ·
+            command = strtok(NULL,space);   //å–ç”¨æˆ·è¾“å…¥æŒ‡ä»¤çš„ç¬¬äºŒä¸ªå­—æ®µï¼Œå³ipåœ°å€
             strcpy(host,command);
 
             /* Create a socket.	*/
@@ -75,18 +69,18 @@ int  main(int   argc, char  *argv[])
               fprintf(stderr,"Socket creation failed\n");
             }else{
                 n = recv(sd, buf, BUFSIZE, 0);
-                printf("\n Á¬½Ó·şÎñÆ÷³É¹¦£¡ \n");
-                printf("ÊäÈë? ¿É²é¿´ÃüÁîÁĞ±í\n");
-                break;  //Á¬½Ó³É¹¦£¬Ìø³öÑ­»·
+                printf("\n è¿æ¥æœåŠ¡å™¨æˆåŠŸï¼ \n");
+                printf("è¾“å…¥? å¯æŸ¥çœ‹å‘½ä»¤åˆ—è¡¨\n");
+                break;  //è¿æ¥æˆåŠŸï¼Œè·³å‡ºå¾ªç¯
             }
 
          }else{
-            printf("ÇëÏÈÓÃ¡°OPEN [ip]¡±ÃüÁîÁ¬½Óµ½ftp·şÎñÆ÷\n");
+            printf("è¯·å…ˆç”¨â€œOPEN [ip]â€å‘½ä»¤è¿æ¥åˆ°ftpæœåŠ¡å™¨\n");
          }
     }
-    /*socketÁ¬½Óµ½·şÎñÆ÷ END*/
+    /*socketè¿æ¥åˆ°æœåŠ¡å™¨ END*/
 
-    /*µÇÂ¼µ½ftp */
+    /*ç™»å½•åˆ°ftp */
     while(1){
          fprintf(stderr,"MyFTP>");
          gets(input);
@@ -94,20 +88,20 @@ int  main(int   argc, char  *argv[])
 
          if(strcmp(input,"?")==0)
          {
-                printf("USER [username]  ÓÃ»§ÃûµÇÂ¼\n");
-                //printf("PASS [password]  ÃÜÂë\n");
-                printf("NLST ÁĞ³öÎÄ¼şÄ¿Â¼\n");
-                printf("RETR [file]  ÏÂÔØÎÄ¼ş\n");
-                printf("STOR [file] ÉÏ´«ÎÄ¼ş\n");
-                printf("QUIT Àë¿ª\n");
+                printf("USER [username]  ç”¨æˆ·åç™»å½•\n");
+                //printf("PASS [password]  å¯†ç \n");
+                printf("NLST åˆ—å‡ºæ–‡ä»¶ç›®å½•\n");
+                printf("RETR [file]  ä¸‹è½½æ–‡ä»¶\n");
+                printf("STOR [file] ä¸Šä¼ æ–‡ä»¶\n");
+                printf("QUIT ç¦»å¼€\n");
          }else{
-                command = strtok(input,space); //È¡ÓÃ»§ÊäÈëÖ¸ÁîµÄµÚÒ»¸ö×Ö¶Î£¨ÒÔ¿Õ¸ñ¸ô¿ª£©
+                command = strtok(input,space); //å–ç”¨æˆ·è¾“å…¥æŒ‡ä»¤çš„ç¬¬ä¸€ä¸ªå­—æ®µï¼ˆä»¥ç©ºæ ¼éš”å¼€ï¼‰
                 if(strcmp(command,"USER")==0){
-                        command = strtok(NULL,space);   //È¡ÓÃ»§ÊäÈëÖ¸ÁîµÄµÚ¶ş¸ö×Ö¶Î£¬¼´ÓÃ»§Ãû
+                        command = strtok(NULL,space);   //å–ç”¨æˆ·è¾“å…¥æŒ‡ä»¤çš„ç¬¬äºŒä¸ªå­—æ®µï¼Œå³ç”¨æˆ·å
                         sprintf(input, "USER %s\r\n",command);
 
                         if(send_recv(sd, input, buf, &n)==331){
-                                printf("ÇëÊäÈëÃÜÂë:");
+                                printf("è¯·è¾“å…¥å¯†ç :");
                                 gets(buf);
                                 sprintf(input, "PASS %s\r\n",buf);
 
@@ -116,20 +110,20 @@ int  main(int   argc, char  *argv[])
                                         break;
                                 }
                                 else{
-                                        printf("µÇÂ¼Ê§°Ü!\n");
+                                        printf("ç™»å½•å¤±è´¥!\n");
                                         return -1;
                                 }
                         }else{
-                                printf("ÓÃ»§ÃûÎŞĞ§!\n");
+                                printf("ç”¨æˆ·åæ— æ•ˆ!\n");
                                 return -1;
                         }
                 }else{
-                    printf("ÇëÏÈµÇÂ¼!\n");
+                    printf("è¯·å…ˆç™»å½•!\n");
                 }
         }
     }   /*while end*/
 
-    /*»ñÈ¡ÓÃ»§ÊäÈëÖ¸Áî*/
+    /*è·å–ç”¨æˆ·è¾“å…¥æŒ‡ä»¤*/
   while (1) {
     fprintf(stderr,"MyFTP>");
     gets(input);
@@ -137,22 +131,22 @@ int  main(int   argc, char  *argv[])
 
     if(strcmp(input,"?")==0)
     {
-        //printf("USER [username]  µÇÂ¼µÄÓÃ»§Ãû\n");
-        //printf("PASS [password]  ÃÜÂë\n");
-        printf("NLST ÁĞ³öÎÄ¼şÄ¿Â¼\n");
-        printf("RETR [file]  ÏÂÔØÎÄ¼ş\n");
-        printf("STOR [file] ÉÏ´«ÎÄ¼ş\n");
-        printf("QUIT Àë¿ª\n");
+        //printf("USER [username]  ç™»å½•çš„ç”¨æˆ·å\n");
+        //printf("PASS [password]  å¯†ç \n");
+        printf("NLST åˆ—å‡ºæ–‡ä»¶ç›®å½•\n");
+        printf("RETR [file]  ä¸‹è½½æ–‡ä»¶\n");
+        printf("STOR [file] ä¸Šä¼ æ–‡ä»¶\n");
+        printf("QUIT ç¦»å¼€\n");
     }
     else if(strcmp(input,"NLST")==0)
     {
         n = nlst_list(sd);
         if(n<0){
-            printf("\n»ñÈ¡ÎÄ¼şÁĞ±íÊ§°Ü£¡\n");
+            printf("\nè·å–æ–‡ä»¶åˆ—è¡¨å¤±è´¥ï¼\n");
         }
     }
     else if(strcmp(command,"OPEN")==0){
-        command = strtok(NULL,space);   //È¡ÓÃ»§ÊäÈëÖ¸ÁîµÄµÚ¶ş¸ö×Ö¶Î£¬¼´ipµØÖ·
+        command = strtok(NULL,space);   //å–ç”¨æˆ·è¾“å…¥æŒ‡ä»¤çš„ç¬¬äºŒä¸ªå­—æ®µï¼Œå³ipåœ°å€
         strcpy(host,command);
         /* Create a socket.	*/
         sd = make_socket(host,port);
@@ -163,43 +157,43 @@ int  main(int   argc, char  *argv[])
                 //sscanf(buf, "%d", &n);
                 printf("\n connect the ftp server successfully \n");
             }
-            break;  //Á¬½Ó³É¹¦£¬Ìø³öÑ­»·
+            break;  //è¿æ¥æˆåŠŸï¼Œè·³å‡ºå¾ªç¯
         }
 
      }
-    else{   //ÓĞ¶à¸ö²ÎÊıÓÃ¿Õ¸ñ¸ô¿ªµÄÖ¸Áî
-        command = strtok(input,space);  //strtokº¯ÊıÓÃÓÚ½ØÈ¡ÊäÈëÖ¸ÁîÒÔ¿Õ¸ñÎª¼ä¸ôµÄµÚÒ»¸ö´Ê£¬strtok(NULL,space)¿É»ñÈ¡µÚ¶ş¸ö´Ê
+    else{   //æœ‰å¤šä¸ªå‚æ•°ç”¨ç©ºæ ¼éš”å¼€çš„æŒ‡ä»¤
+        command = strtok(input,space);  //strtokå‡½æ•°ç”¨äºæˆªå–è¾“å…¥æŒ‡ä»¤ä»¥ç©ºæ ¼ä¸ºé—´éš”çš„ç¬¬ä¸€ä¸ªè¯ï¼Œstrtok(NULL,space)å¯è·å–ç¬¬äºŒä¸ªè¯
 
         if(strcmp(command,"RETR")==0){
             sourcefile = strtok(NULL,space);
             if(sourcefile){
                 aimfile = strtok(NULL,space);
-                if(!aimfile){   //ÈôÃ»ÓĞÖ¸¶¨µÚÈı¸ö²ÎÊı¾ÍÈÃÔ´ÎÄ¼şºÍÄ¿±êÎÄ¼şÍ¬Ãû
+                if(!aimfile){   //è‹¥æ²¡æœ‰æŒ‡å®šç¬¬ä¸‰ä¸ªå‚æ•°å°±è®©æºæ–‡ä»¶å’Œç›®æ ‡æ–‡ä»¶åŒå
                     aimfile = sourcefile;
                 }
                 if(res_num = down_file(sd,sourcefile,aimfile,&size) != 0 )
-                    printf("\n»ñÈ¡Ô¶³ÌÎÄ¼şÊ§°Ü£¡\n");
+                    printf("\nè·å–è¿œç¨‹æ–‡ä»¶å¤±è´¥ï¼\n");
                 else{
-                    fprintf(stderr,"\n%sÎÄ¼şÏÂÔØ³É¹¦£¡¹²ÏÂÔØ%d×Ö½Ú\n",sourcefile,size);
+                    fprintf(stderr,"\n%sæ–‡ä»¶ä¸‹è½½æˆåŠŸï¼å…±ä¸‹è½½%då­—èŠ‚\n",sourcefile,size);
                 }
             }else{
-                printf("ÇëÊäÈëÎÄ¼şÃû£¡\n");
+                printf("è¯·è¾“å…¥æ–‡ä»¶åï¼\n");
             }
         }
         else if(strcmp(command,"STOR")==0){
             sourcefile = strtok(NULL,space);
             if(sourcefile){
                 aimfile = strtok(NULL,space);
-                if(!aimfile){   //ÈôÃ»ÓĞÖ¸¶¨µÚÈı¸ö²ÎÊı¾ÍÈÃÔ´ÎÄ¼şºÍÄ¿±êÎÄ¼şÍ¬Ãû
+                if(!aimfile){   //è‹¥æ²¡æœ‰æŒ‡å®šç¬¬ä¸‰ä¸ªå‚æ•°å°±è®©æºæ–‡ä»¶å’Œç›®æ ‡æ–‡ä»¶åŒå
                     aimfile = sourcefile;
                 }
                 if(res_num = up_file(sd,sourcefile,aimfile,&size) != 0 )
-                    printf("\nÉÏ´«ÎÄ¼şÊ§°Ü£¡\n");
+                    printf("\nä¸Šä¼ æ–‡ä»¶å¤±è´¥ï¼\n");
                 else{
-                    fprintf(stderr,"\n%sÎÄ¼şÉÏ´«³É¹¦£¡¹²ÉÏ´«%d×Ö½Ú\n",sourcefile,size);
+                    fprintf(stderr,"\n%sæ–‡ä»¶ä¸Šä¼ æˆåŠŸï¼å…±ä¸Šä¼ %då­—èŠ‚\n",sourcefile,size);
                 }
             }else{
-                printf("ÇëÊäÈëÎÄ¼şÃû£¡\n");
+                printf("è¯·è¾“å…¥æ–‡ä»¶åï¼\n");
             }
         }
         else if(strcmp(command,"OPEN")==0){
@@ -212,7 +206,7 @@ int  main(int   argc, char  *argv[])
             break;
         }
         else{
-            printf("´íÎóÖ¸Áî!\n");
+            printf("é”™è¯¯æŒ‡ä»¤!\n");
         }
     }
   }  //  while
@@ -220,16 +214,16 @@ int  main(int   argc, char  *argv[])
    return 0;
 }  // main
 
-/*¡ª¡ªº¯ÊıÊµÏÖ¡ª¡ª*/
+/*â€”â€”å‡½æ•°å®ç°â€”â€”*/
 
-/*Í¨¹ıhostºÍ¶Ë¿Úport´´½¨socketÁ¬½Ó*/
+/*é€šè¿‡hostå’Œç«¯å£portåˆ›å»ºsocketè¿æ¥*/
 int  make_socket(char *host,int port)
 {
   struct     hostent   *ptrh;	/* pointer to a host table entry		*/
   struct     protoent  *ptrp;	/* pointer to a protocol table entry	*/
   struct     sockaddr_in sad;	/* structre to hold server's address	*/
   SOCKET        sd;				/* socket descriptor's address			*/
-  int       timeout ; //¸´ÔÓµÄÍøÂç»·¾³ÒªÉèÖÃ³¬Ê±ÅĞ¶Ï
+  int       timeout ; //å¤æ‚çš„ç½‘ç»œç¯å¢ƒè¦è®¾ç½®è¶…æ—¶åˆ¤æ–­
 #ifdef WIN32
   WSADATA wsaData;
   WSAStartup(0x0101, &wsaData);
@@ -259,7 +253,7 @@ int  make_socket(char *host,int port)
       return -1;
     }  //  if
 
-    //ÉèÖÃ³¬Ê±Á¬½Ó
+    //è®¾ç½®è¶…æ—¶è¿æ¥
     timeout = 3000;
     setsockopt(sd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout));
     setsockopt(sd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,sizeof(timeout));
@@ -273,7 +267,7 @@ int  make_socket(char *host,int port)
     return sd;
 }
 
-/*Ïòsocket·¢ËÍÃüÁîinput²¢½ÓÊÕÏìÓ¦µ½res£¬lenÎªresµÄ³¤¶È*/
+/*å‘socketå‘é€å‘½ä»¤inputå¹¶æ¥æ”¶å“åº”åˆ°resï¼Œlenä¸ºresçš„é•¿åº¦*/
 int send_recv(SOCKET sd, char *input, char *res, int *len)
 {
     char buf[BUFSIZE];
@@ -289,14 +283,14 @@ int send_recv(SOCKET sd, char *input, char *res, int *len)
     if(NULL != res)
         sprintf(res, "%s", buf);
 
-    sscanf(buf, "%d", &res_num);    //½ØÈ¡·şÎñÆ÷·µ»ØµÄÏìÓ¦Âë
+    sscanf(buf, "%d", &res_num);    //æˆªå–æœåŠ¡å™¨è¿”å›çš„å“åº”ç 
     return res_num;
 }
 
-/*Á¬½Óµ½PASV½Ó¿Ú
- *       PASV£¨±»¶¯£©·½Ê½µÄÁ¬½Ó¹ı³ÌÊÇ£º
- *       ¿Í»§¶ËÏò·şÎñÆ÷µÄFTP¶Ë¿Ú£¨Ä¬ÈÏÊÇ21£©·¢ËÍÁ¬½ÓÇëÇó£¬
- *       ·şÎñÆ÷½ÓÊÜÁ¬½Ó£¬½¨Á¢Ò»ÌõÃüÁîÁ´Â·¡£
+/*è¿æ¥åˆ°PASVæ¥å£
+ *       PASVï¼ˆè¢«åŠ¨ï¼‰æ–¹å¼çš„è¿æ¥è¿‡ç¨‹æ˜¯ï¼š
+ *       å®¢æˆ·ç«¯å‘æœåŠ¡å™¨çš„FTPç«¯å£ï¼ˆé»˜è®¤æ˜¯21ï¼‰å‘é€è¿æ¥è¯·æ±‚ï¼Œ
+ *       æœåŠ¡å™¨æ¥å—è¿æ¥ï¼Œå»ºç«‹ä¸€æ¡å‘½ä»¤é“¾è·¯ã€‚
 */
 int pasv_connect(SOCKET sd)
 {
@@ -309,7 +303,7 @@ int pasv_connect(SOCKET sd)
     char input[BUFSIZE];
     char buf[BUFSIZE];
 
-    //ÉèÖÃPASV±»¶¯Ä£Ê½
+    //è®¾ç½®PASVè¢«åŠ¨æ¨¡å¼
     memset(input,sizeof(input),0);
     sprintf(input, "PASV\r\n");
     result = send_recv(sd,input, buf,  &len);
@@ -318,11 +312,11 @@ int pasv_connect(SOCKET sd)
         sscanf(buf, "%*[^(](%d,%d,%d,%d,%d,%d)",
                &addr[0],&addr[1],&addr[2],&addr[3],
                &addr[4],&addr[5]);
-    }   //ÌáÈ¡·şÎñÆ÷¼àÌıµÄipºÍ¶Ë¿ÚºÅ
+    }   //æå–æœåŠ¡å™¨ç›‘å¬çš„ipå’Œç«¯å£å·
 
-    //Á¬½ÓPASV¶Ë¿Ú
+    //è¿æ¥PASVç«¯å£
     memset(buf, sizeof(buf), 0);
-    port = addr[4]*256+addr[5];          //¶Ë¿Ú¼ÆËã
+    port = addr[4]*256+addr[5];          //ç«¯å£è®¡ç®—
     sprintf(buf, "%d.%d.%d.%d",addr[0],addr[1],addr[2],addr[3]);
     sd_pasv = make_socket(buf,port);
 
@@ -331,7 +325,7 @@ int pasv_connect(SOCKET sd)
     return sd_pasv;
 }
 
-/*ÁĞ³öÎÄ¼şÄ¿Â¼*/
+/*åˆ—å‡ºæ–‡ä»¶ç›®å½•*/
 int nlst_list(SOCKET sd)
 {
     SOCKET sd_pasv;
@@ -340,28 +334,28 @@ int nlst_list(SOCKET sd)
     int result;
     int len;
 
-    //Á¬½Óµ½PASV½Ó¿Ú
+    //è¿æ¥åˆ°PASVæ¥å£
     sd_pasv = pasv_connect(sd);
     if(-1 == sd_pasv)
     {
         return -1;
     }
-    //·¢ËÍNLSTÃüÁî
+    //å‘é€NLSTå‘½ä»¤
     memset(buf,sizeof(buf),0);
     send_re = send_recv(sd, "NLST\r\n",buf,&len);
     if(send_re >= 300 || send_re < 0)
         return -1;
-    /*´ÓPASV½Ó¿Ú»ñÈ¡Êı¾İ*/
+    /*ä»PASVæ¥å£è·å–æ•°æ®*/
     if( (len = recv(sd_pasv,buf,BUFSIZE,0)) > 0)
     {
         buf[len] = 0;
-        printf("ÎÄ¼şÄ¿Â¼£º\n");
+        printf("æ–‡ä»¶ç›®å½•ï¼š\n");
         printf("%s",buf);
-        printf("\nÄ¿Â¼´«ÊäÍê±Ï\n");
+        printf("\nç›®å½•ä¼ è¾“å®Œæ¯•\n");
     }
     closesocket(sd_pasv);
 
-    //Ïò·şÎñÆ÷½ÓÊÕ·µ»ØÖµ
+    //å‘æœåŠ¡å™¨æ¥æ”¶è¿”å›å€¼
     memset(buf, sizeof(buf), 0);
     len = recv(sd, buf, BUFSIZE, 0);
     buf[len] = 0;
@@ -373,10 +367,10 @@ int nlst_list(SOCKET sd)
 }
 
 /*
- * ×÷ÓÃ: ´Ó·şÎñÆ÷ÏÂÔØÎÄ¼şµ½±¾µØ RETR
- * ²ÎÊı: SOCKET£¬Ô´ÎÄ¼şÃû£¬Ä¿±êÎÄ¼şÃû£¬ÎÄ¼ş´óĞ¡
- * ·µ»Ø 0 ±íÊ¾ÁĞ±í³É¹¦  result>0 ±íÊ¾ÆäËû´íÎóÏìÓ¦Âë
- *         -1:ÎÄ¼ş´´½¨Ê§°Ü  -2 pasv½Ó¿Ú´íÎó
+ * ä½œç”¨: ä»æœåŠ¡å™¨ä¸‹è½½æ–‡ä»¶åˆ°æœ¬åœ° RETR
+ * å‚æ•°: SOCKETï¼Œæºæ–‡ä»¶åï¼Œç›®æ ‡æ–‡ä»¶åï¼Œæ–‡ä»¶å¤§å°
+ * è¿”å› 0 è¡¨ç¤ºåˆ—è¡¨æˆåŠŸ  result>0 è¡¨ç¤ºå…¶ä»–é”™è¯¯å“åº”ç 
+ *         -1:æ–‡ä»¶åˆ›å»ºå¤±è´¥  -2 pasvæ¥å£é”™è¯¯
   */
 int down_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
 {
@@ -386,7 +380,7 @@ int down_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
     char res[BUFSIZE];
     int result;
     *size=0;
-    //´ò¿ª±¾µØÎÄ¼ş
+    //æ‰“å¼€æœ¬åœ°æ–‡ä»¶
     FILE * fp = fopen(aimfile, "wb");
     if(NULL == fp)
     {
@@ -394,36 +388,36 @@ int down_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
         return -1;
     }
 
-    //Á¬½Óµ½PASV½Ó¿Ú ÓÃÓÚ´«ÊäÎÄ¼ş
+    //è¿æ¥åˆ°PASVæ¥å£ ç”¨äºä¼ è¾“æ–‡ä»¶
     sd_data = pasv_connect(sd);
 
     if(-1 == sd_data)
     {
-        fclose(fp); //¹Ø±ÕÎÄ¼ş
+        fclose(fp); //å…³é—­æ–‡ä»¶
         return -2;
     }
 
-    //·¢ËÍRETRÃüÁî
+    //å‘é€RETRå‘½ä»¤
     memset(buf, sizeof(buf), 0);
     sprintf(buf, "RETR %s\r\n", sourcefile);
 
     result = send_recv(sd,buf,res,&len);
 
-    if(result >= 300 || result < 0) //ÏìÓ¦Âë
+    if(result >= 300 || result < 0) //å“åº”ç 
     {
         fclose(fp);
         return result;
     }
 
-    //¿ªÊ¼ÏòPASV¶ÁÈ¡ËùÒªÏÂÔØÎÄ¼şµÄÊı¾İ
+    //å¼€å§‹å‘PASVè¯»å–æ‰€è¦ä¸‹è½½æ–‡ä»¶çš„æ•°æ®
     memset(buf, sizeof(buf), 0);
     while((len = recv(sd_data, buf, BUFSIZE, 0)) > 0 )
     {
         write_len = fwrite(&buf, len, 1, fp);
-        if(write_len != 1) //Ğ´ÈëÎÄ¼ş²»ÍêÕû
+        if(write_len != 1) //å†™å…¥æ–‡ä»¶ä¸å®Œæ•´
         {
-            closesocket(sd_data); //¹Ø±ÕÌ×½Ó×Ö
-            fclose(fp); //¹Ø±ÕÎÄ¼ş
+            closesocket(sd_data); //å…³é—­å¥—æ¥å­—
+            fclose(fp); //å…³é—­æ–‡ä»¶
             return -1;
         }
         if(NULL != size)
@@ -432,11 +426,11 @@ int down_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
         }
     }
 
-    //ÏÂÔØÍê³É
+    //ä¸‹è½½å®Œæˆ
     closesocket(sd_data);
     fclose(fp);
 
-    //Ïò·şÎñÆ÷½ÓÊÕ·µ»ØÖµ
+    //å‘æœåŠ¡å™¨æ¥æ”¶è¿”å›å€¼
     memset(buf, sizeof(buf), 0);
     len = recv(sd, buf, BUFSIZE, 0);
     buf[len] = 0;
@@ -449,10 +443,10 @@ int down_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
 }
 
 /*
- * ×÷ÓÃ: ÉÏ´«ÎÄ¼şµ½·şÎñÆ÷ STOR
- * ²ÎÊı: SOCKET£¬Ô´ÎÄ¼şÃû£¬Ä¿±êÎÄ¼şÃû£¬ÎÄ¼ş´óĞ¡
- * ·µ»Ø0 ±íÊ¾ÁĞ±í³É¹¦  result>0 ±íÊ¾ÆäËû´íÎóÏìÓ¦Âë
- *  -1:ÎÄ¼ş´´½¨Ê§°Ü  -2 pasv½Ó¿Ú´íÎó
+ * ä½œç”¨: ä¸Šä¼ æ–‡ä»¶åˆ°æœåŠ¡å™¨ STOR
+ * å‚æ•°: SOCKETï¼Œæºæ–‡ä»¶åï¼Œç›®æ ‡æ–‡ä»¶åï¼Œæ–‡ä»¶å¤§å°
+ * è¿”å›0 è¡¨ç¤ºåˆ—è¡¨æˆåŠŸ  result>0 è¡¨ç¤ºå…¶ä»–é”™è¯¯å“åº”ç 
+ *  -1:æ–‡ä»¶åˆ›å»ºå¤±è´¥  -2 pasvæ¥å£é”™è¯¯
   */
 int up_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
 {
@@ -463,7 +457,7 @@ int up_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
     FILE * fp;
     int result;
 
-    //´ò¿ª±¾µØÎÄ¼ş
+    //æ‰“å¼€æœ¬åœ°æ–‡ä»¶
     fp = fopen(sourcefile, "rb");
     if(NULL == fp)
     {
@@ -471,7 +465,7 @@ int up_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
         return -1;
     }
 
-    //Á¬½Óµ½PASV½Ó¿Ú
+    //è¿æ¥åˆ°PASVæ¥å£
     sd_data = pasv_connect(sd);
     if(sd_data == -1)
     {
@@ -479,7 +473,7 @@ int up_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
         return -2;
     }
 
-    //·¢ËÍSTORÃüÁî
+    //å‘é€STORå‘½ä»¤
     memset(buf, sizeof(buf), 0);
     sprintf(buf, "STOR %s\r\n", aimfile);
     result = send_recv(sd,buf,res,&len);
@@ -490,7 +484,7 @@ int up_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
         return result;
     }
 
-    //¿ªÊ¼ÏòPASVÍ¨µÀĞ´Êı¾İ
+    //å¼€å§‹å‘PASVé€šé“å†™æ•°æ®
     memset(buf, sizeof(buf), 0);
     while( (len = fread(buf, 1, BUFSIZE, fp)) > 0)
     {
@@ -506,11 +500,11 @@ int up_file(SOCKET sd, char *sourcefile, char *aimfile, int * size)
             *size += send_len;
         }
     }
-    //Íê³ÉÉÏ´«
+    //å®Œæˆä¸Šä¼ 
     closesocket(sd_data);
     fclose(fp);
 
-    //Ïò·şÎñÆ÷½ÓÊÕÏìÓ¦Âë
+    //å‘æœåŠ¡å™¨æ¥æ”¶å“åº”ç 
     memset(buf, sizeof(buf), 0);
     len = recv(sd, buf, BUFSIZE, 0);
     buf[len] = 0;
